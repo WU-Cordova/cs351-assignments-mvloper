@@ -13,15 +13,16 @@ class AVLNode(Generic[K, V]):
       self.right = right
       self.height = 1
 
-
+# height = max(left.height, right.height) + 1
+# balance = left.height - right.height
 
 
 class AVLTree(IAVLTree[K, V], Generic[K,V]):
 
-   def __init__(self, starting_sequence: Optional[Sequence[Tuple]]=None):
-      if starting_sequence is not None:
-         for key, value in starting_sequence:
-            self.insert(key, value)
+    def __init__(self, starting_sequence: Optional[Sequence[Tuple]]=None):
+        if starting_sequence is not None:
+            for key, value in starting_sequence:
+                self.insert(key, value)
 
     def insert(self, key: K, value: V) -> None:
         """Inserts a key-value pair into the binary search tree.
@@ -30,6 +31,7 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
                 key (K): The key used to order the nodes in the tree.
                 value (V): The value associated with the key.
         """
+        if tree is empty create new node
         pass
     
     def search(self, key: K) -> Optional[V]:
@@ -41,7 +43,7 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Returns:
             Optional[V]: The value associated with the key if found, or None if the key is not present.
         """
-        pass
+        return
 
     def delete(self, key: K) -> None:
         """Deletes a key and its associated value from the binary search tree.
@@ -52,7 +54,7 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Raises:
             KeyError: If the key is not present in the tree.
         """
-        pass
+        
 
     def inorder(self, visit: Optional[Callable[[V], None]]=None) -> List[K]:
         """Returns the inorder traversal of the binary search tree, containing the keys in sorted order.
