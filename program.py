@@ -1,5 +1,13 @@
-from datastructures.avltree import AVLTree, AVLNode
+# from datastructures.avltree import AVLTree, AVLNode
 import random
+from collections import deque
+
+lyst = [1, 2, 3]
+print(lyst)
+# lyst.extend([None])
+# print(lyst)
+lyst.extend([])
+print(lyst)
 
 # sequence0 = [(0,0), (1,1), (2,2), (3,3), (4,4), (5,5), (6,6)]
 # sequence = []

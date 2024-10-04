@@ -1,6 +1,7 @@
 from __future__ import annotations
 from datastructures.iavltree import IAVLTree, K, V
 from typing import Generic, Callable, List, Optional, Sequence, Tuple
+from collections import deque
 
 
 
@@ -104,7 +105,19 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Returns:
             Optional[V]: The value associated with the key if found, or None if the key is not present.
         """
-        return
+        node = self.searcher(key=key, node=self.root)
+        return None if node == None else node.value
+
+    def searcher(self, key: K, node: AVLNode) -> Optional[AVLNode]:
+        if node == None:
+            return None
+        if node.key == key:
+            return node.value
+        if node.key < key:
+            return self.searcher(node.right)
+        if node.key > key:
+            return self.searcher(node.left)
+
 
     def delete(self, key: K) -> None:
         """Deletes a key and its associated value from the binary search tree.
@@ -115,6 +128,13 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Raises:
             KeyError: If the key is not present in the tree.
         """
+        node = self.searcher(key=key, node=self.root)
+        if node == None:
+            raise KeyError
+        if 
+
+        if node.parent.left == node:
+            set to 
         
 
     def inorder(self, visit: Optional[Callable[[V], None]]=None) -> List[K]:
@@ -150,7 +170,15 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Returns:
             List[K]: The list of keys in preorder traversal.
         """
-        pass
+        return self.preorder_helper(self.root)
+
+    def preorder_helper(self, node: AVLNode) -> List[K]:
+        sequence = []
+        if node != None:
+            sequence.append(node.key)
+            sequence.extend(self.preorder_helper(node.left))
+            sequence.extend(self.preorder_helper(node.right))
+        return sequence
 
     def postorder(self, visit: Optional[Callable[[V], None]]=None) -> List[K]:
         """Returns the postorder traversal of the binary search tree.
@@ -158,7 +186,15 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Returns:
             List[K]: The list of keys in postorder traversal.
         """
-        pass
+        return self.postorder_helper(self.root)
+
+    def postorder_helper(self, node:AVLNode) -> List[K]:
+        sequence = []
+        if node != None:
+            sequence.extend(postorder_helper(node.left))
+            sequence.extend(postorder_helper(node.right))
+            sequence.append(node.key)
+        return sequence
 
     def bforder(self, visit: Optional[Callable[[V], None]]=None) -> List[K]:
         """Returns the keys in the binary search tree in breadth-first order.
@@ -169,13 +205,25 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Returns:
             List[K]: The list of keys in breadth-first order.
         """
-        return self.bf_helper(self.root)
-    
-    def bf_helper(self, node: AVLNode) -> List[K]:
-        subtree = [ node.key ]
-        subtree.extend(self.bf_helper(node.left))
-        subtree.extend(self.bf_helper(node.right))
-        return subtree
+        # https://medium.com/@sergioli/breath-first-and-depth-first-search-on-tree-and-graph-in-python-99fd1861893e
+        if self.root is None:
+            return
+        
+        queue = deque([self.root])
+        sequence = []
+
+        while queue:
+            node = queue.popleft()  # dequeue a node from the front of the queue
+            sequence.append(node.key)
+
+            # enqueue left child
+            if node.left:
+                queue.append(node.left)
+            # enqueue right child
+            if node.right:
+                queue.append(node.right)
+
+        return sequence
 
     def size(self) -> int:
         """Returns the number of nodes in the binary search tree.
@@ -186,4 +234,9 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         Returns:
             int: The number of nodes in the tree.
         """
-        pass
+        return self.subtree_size(self.root)
+
+    def subtree_size(self, node: AVLNode) -> int:
+        left_size = 0 if node.left == None else self.subtree_size(node.left)
+        right_size = 0 if node.right == None else self.subtree_size(node.right)
+        return 1 + left_size + right_size
