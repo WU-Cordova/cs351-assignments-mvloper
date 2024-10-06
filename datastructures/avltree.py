@@ -61,7 +61,10 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         return self.balance_tree(node=node)
 
     def balance_tree(self, node: AVLNode) -> AVLNode:
-        if node.balance() > 1:
+        if node == None:
+            return None
+
+        elif node.balance() > 1:
             if node.left.balance() < 0:
                 node.left = self.rotate_left(node.left)
             node = self.rotate_right(node)
@@ -96,6 +99,13 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         return new_root
         
     
+
+
+
+
+
+
+
     def search(self, key: K) -> Optional[V]:
         """Searches for a key in the binary search tree and returns the associated value if found.
 
@@ -118,24 +128,59 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         if node.key > key:
             return self.searcher(node.left)
 
+    def delete(self, key: K) -> None: 
+        self.root = self.delete_helper(self.root, key)
+        return None
 
-    def delete(self, key: K) -> None:
-        """Deletes a key and its associated value from the binary search tree.
-
-        Args:
-            key (K): The key to delete.
-
-        Raises:
-            KeyError: If the key is not present in the tree.
-        """
-        node = self.searcher(key=key, node=self.root)
+    def delete_helper(self, node: AVLNode, key: K) -> AVLNode:
         if node == None:
-            raise KeyError
-        if 
+            return None
+        if key < node.key:
+            node.left = self.delete_helper(node.left, key)
+        elif key > node.key:
+            node.right = self.delete_helper(node.right, key)
+        elif key == node.key:
+            successor = self.find_successor(node.right)
+            if successor == None:
+                node =
+            node.key = successor.key
+            node.value = successor.value
+            node.right = self.delete_helper(node=node.right,key=successor.key)
 
-        if node.parent.left == node:
-            set to 
-        
+        if node != None:
+            node.update_height()
+            return self.balance_tree(node=node)
+        else:
+            return None
+
+    def find_successor(self, node: AVLNode) -> AVLNode:
+        if node.left != None and node.right != None:
+            current = node.right
+            while current.left != None:
+                current = current.left
+            return current
+        else:
+            pass
+
+            
+            
+            # If node is a leaf or has a single child,
+            
+            #     return node or its child
+            
+            
+            
+            # Else #two children - successor will be the smallest node in the right subtree 
+            
+            
+            
+            #     Set currrent to node
+            
+            #     while current.left is not None
+            
+            #         set current to current.left
+            
+            #     return current
 
     def inorder(self, visit: Optional[Callable[[V], None]]=None) -> List[K]:
         """Returns the inorder traversal of the binary search tree, containing the keys in sorted order.
@@ -191,8 +236,8 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
     def postorder_helper(self, node:AVLNode) -> List[K]:
         sequence = []
         if node != None:
-            sequence.extend(postorder_helper(node.left))
-            sequence.extend(postorder_helper(node.right))
+            sequence.extend(self.postorder_helper(node.left))
+            sequence.extend(self.postorder_helper(node.right))
             sequence.append(node.key)
         return sequence
 
