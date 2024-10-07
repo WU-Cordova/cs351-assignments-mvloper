@@ -142,10 +142,11 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         elif key == node.key:
             successor = self.find_successor(node.right)
             if successor == None:
-                node =
-            node.key = successor.key
-            node.value = successor.value
-            node.right = self.delete_helper(node=node.right,key=successor.key)
+                return node.left
+            else:
+                node.key = successor.key
+                node.value = successor.value
+                node.right = self.delete_helper(node=node.right,key=successor.key)
 
         if node != None:
             node.update_height()
@@ -154,33 +155,15 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
             return None
 
     def find_successor(self, node: AVLNode) -> AVLNode:
-        if node.left != None and node.right != None:
-            current = node.right
+        if node == None:
+            return None
+        elif node.left == None:
+            return node
+        else:
+            current = node.left
             while current.left != None:
                 current = current.left
             return current
-        else:
-            pass
-
-            
-            
-            # If node is a leaf or has a single child,
-            
-            #     return node or its child
-            
-            
-            
-            # Else #two children - successor will be the smallest node in the right subtree 
-            
-            
-            
-            #     Set currrent to node
-            
-            #     while current.left is not None
-            
-            #         set current to current.left
-            
-            #     return current
 
     def inorder(self, visit: Optional[Callable[[V], None]]=None) -> List[K]:
         """Returns the inorder traversal of the binary search tree, containing the keys in sorted order.
