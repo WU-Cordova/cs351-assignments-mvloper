@@ -122,11 +122,11 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         if node == None:
             return None
         if node.key == key:
-            return node.value
+            return node
         if node.key < key:
-            return self.searcher(node.right)
+            return self.searcher(key=key, node=node.right)
         if node.key > key:
-            return self.searcher(node.left)
+            return self.searcher(key=key, node=node.left)
 
     def delete(self, key: K) -> None: 
         self.root = self.delete_helper(self.root, key)

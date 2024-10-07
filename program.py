@@ -50,6 +50,10 @@ def main():
     print(f"{'preorder:':10} {tree.preorder()}")
     print(f"{'postorder:':10} {tree.postorder()}")
 
+    #does search work
+    print(tree.search(3))
+    print(tree.search(9))
+
     print("it worked :D")
 
 if __name__ == '__main__':
