@@ -177,6 +177,8 @@ class AVLTree(IAVLTree[K, V], Generic[K,V]):
         return self.inorder_helper(self.root)
 
     def inorder_helper(self, node:AVLNode) -> List[K]:
+        if node == None:
+            return None
         subtree = []
         if node.left != None:
             subtree.extend(
