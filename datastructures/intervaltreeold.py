@@ -25,7 +25,7 @@ class IntervalTree(AVLTree):
             low: int, 
             high: int, 
             value, 
-        ) -> None:
+            ) -> None:
         self.root = self.insert_helper(low, high, value, self.root)
         return
 
@@ -34,27 +34,39 @@ class IntervalTree(AVLTree):
             low: int, 
             high: int, 
             value, 
-            node: IntervalNode
-        ) -> IntervalNode:
+            node: IntervalNode,
+            ) -> IntervalNode:
 
         if node == None:
-            node = IntervalNode(
-                low=low, 
-                intervals_at_low=AVLTree(
-                    starting_sequence=[(high, value)]
-                    )
-                )
-            
+            node = IntervalNode(low=low)
+            node.intervals_at_low.insert(key=high, value=value)
         else:
             if node.low < low:
-                self.insert_helper(low, high, value, node.right)
+                self.insert_helper(
+                    low=low, 
+                    high=high, 
+                    value=value, 
+                    node=node.right,
+                )
             elif node.low > low:
-                self.insert_helper(low, high, value, node.left)
+                self.insert_helper(
+                    low=low, 
+                    high=high, 
+                    value=value, 
+                    node=node.left,
+                )
             elif node.low == low:
                 # insert new node into AVLTree at low
-                node.intervals_at_low.insert(high, value)
+                node.intervals_at_low.insert(key=high, value=value)
 
         return self.balance_tree(node).update_height()
 
+    def search(self, key=int):
+        return self.searcher_helper(key=key, node=self.root)
 
-    # def search(self):
+    def searcher_helper(self, key: int, node: IntervalNode):
+        if node.low > key:
+            return self.searcher_helper(key=key, node=node.left)
+        else:
+            if node.right.low < key:
+                return self.searcher_helper(key=key, node=)
