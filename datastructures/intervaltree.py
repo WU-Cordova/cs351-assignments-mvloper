@@ -19,6 +19,14 @@ class IntervalNode(AVLNode):
     right: Optional[IntervalNode] = None
     left: Optional[IntervalNode] = None
 
+    def update_max_end(self):
+        highs = [x for x in self.value]
+        self.maxend = max(
+            0 if self.left == None else self.left.maxend,
+            0 if self.right == None else self.right.maxend,
+            max(highs)
+            )
+
 
 class IntervalTree(AVLTree):
     def __init__(self):
@@ -36,8 +44,8 @@ class IntervalTree(AVLTree):
         elif node.key < low:
             node.right = self.interval_insert_helper(low=low, high=high, data=data, node=node.right)
         elif node.key > low:
-            node.left = self.interval_insert_helper(low=low, high=high, data=data, node=node.right)
-
+            node.left = self.interval_insert_helper(low=low, high=high, data=data, node=node.left)
+        node.update_max_end()
         node.update_height()
         return self.balance_tree(node=node)
     
